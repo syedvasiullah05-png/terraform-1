@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        terraform 'terraform'
+        terraform 'Terraform-test'
     }
 
     environment {
@@ -11,46 +11,11 @@ pipeline {
     }
 
     stages {
-
         stage('Git Clone') {
             steps {
-                git branch: "${GIT_BRANCH}",
-                    url: "${GIT_URL}"
+                git branch: "${GIT_BRANCH}", url: "${GIT_URL}"
             }
         }
-
-        stage('Terraform Init') {
-            steps {
-                withCredentials([
-                    [$class: 'AmazonWebServicesCredentialsBinding',
-                     credentialsId: 'aws-creds']
-                ]) {
-                    sh 'terraform init'
-                }
-            }
-        }
-
-        stage('Terraform Plan') {
-            steps {
-                withCredentials([
-                    [$class: 'AmazonWebServicesCredentialsBinding',
-                     credentialsId: 'aws-creds']
-                ]) {
-                    sh 'terraform plan'
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                withCredentials([
-                    [$class: 'AmazonWebServicesCredentialsBinding',
-                     credentialsId: 'aws-creds']
-                ]) {
-                    sh 'terraform apply -auto-approve'
-                }
-            }
-        }
+        ...
     }
 }
-
